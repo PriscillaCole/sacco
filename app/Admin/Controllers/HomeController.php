@@ -17,17 +17,13 @@ class HomeController extends Controller
             ->description('Description...')
             ->row(function (Row $row) {
                 $row->column(12, function (Column $column) {
-                    $column->append(Dashboard::cards());
+                    //$column->append(Dashboard::cards());
                 });
-               
             })
             ->row(function (Row $row) {
                 $row->column(12, function (Column $column) {
-                    $column->append(Dashboard::graph1());
+                    //$column->append(Dashboard::graph1());
                 });
-           
-               
             });
-          
     }
 }
