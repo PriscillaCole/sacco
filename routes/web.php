@@ -26,4 +26,3 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/dashboard', function () {
     return view('layouts.dashboard');
 });
-Route::post('/custom-store', 'SaccoMemberController@customStore')->name('custom-store');

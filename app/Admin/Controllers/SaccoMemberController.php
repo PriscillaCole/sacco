@@ -9,7 +9,7 @@ use Encore\Admin\Show;
 use Encore\Admin\Form\NestedForm;
 use \App\Models\SaccoMember;
 use \App\Models\Sacco;
-use \App\Models\SaccoUser;
+use Encore\Admin\Facades\Admin;
 
 
 class SaccoMemberController extends AdminController
@@ -90,18 +90,23 @@ class SaccoMemberController extends AdminController
     {
         $form = new Form(new SaccoMember());
 
-        $form->hasMany('sacco',__('Select Sacco'),
-        function (NestedForm $form)
-        {   
-              //get available saccos from the database
-            $saccos = Sacco::all();
-            $saccoArray = [];
-            foreach ($saccos as $sacco) {
-                $saccoArray[$sacco->id] = $sacco->name;
-        }
+        // $form->hasMany('sacco',__('Select Sacco'),
+        // function (NestedForm $form)
+        // {   
+        //       //get available saccos from the database
+        //     $saccos = Sacco::all();
+        //     $saccoArray = [];
+        //     foreach ($saccos as $sacco) {
+        //         $saccoArray[$sacco->id] = $sacco->name;
+        // }
 
-        $form->select('sacco_id', __('Sacco'))->options($saccoArray)->rules('required'); 
-        });  
+        // $form->select('sacco_id', __('Sacco'))->options($saccoArray)->rules('required'); 
+        // }); 
+
+      
+        $sacco_email = Admin::user()->email;
+        $sacco = Sacco::where('email', $sacco_email)->first();
+        $form->text('sacco_id', __('Sacco'))->default($sacco->name)->readonly();   
         $form->text('full_name', __('Full name'));
         $form->date('date_of_birth', __('Date of birth'))->default(date('Y-m-d'));
         $form->text('gender', __('Gender'));
@@ -125,13 +130,14 @@ class SaccoMemberController extends AdminController
         $form->text('beneficiary_name', __('Beneficiary name'));
         $form->text('beneficiary_relationship', __('Beneficiary relationship'));
         $form->hidden('password', __('Password'))->default('12345678');
+   
 
        // return to list after saving
         $form->saved(function (Form $form) {
             return redirect(admin_url('sacco-members'));
         });
         
-        $form->setAction(route('custom-store'));
+        
 
         return $form;
     }

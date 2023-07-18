@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use \App\Models\SaccoUser;
 class SaccoMember extends Model
 {
     use HasFactory;
@@ -36,7 +35,7 @@ class SaccoMember extends Model
 
     public function sacco()
     {
-        return $this->hasMany(SaccoUser::class);
+        return $this->belongsTo(Sacco::class);
     }
    //callback before saving, to has a unique id
     public static function boot()
