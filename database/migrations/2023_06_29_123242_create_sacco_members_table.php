@@ -16,6 +16,7 @@ class CreateSaccoMembersTable extends Migration
         Schema::create('sacco_members', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sacco_id');
+            $table->unsignedInteger('user_id')->nullable();
             $table->string('full_name');
             $table->date('date_of_birth');
             $table->string('gender');
@@ -38,10 +39,12 @@ class CreateSaccoMembersTable extends Migration
             $table->string('next_of_kin_contact')->nullable();
             $table->string('beneficiary_name')->nullable();
             $table->string('beneficiary_relationship')->nullable();
+            $table->string('status')->default('pending');
             $table->string('password');
             $table->timestamps();
 
             $table->foreign('sacco_id')->references('id')->on('saccos')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('admin_users')->onDelete('cascade');
         });
     }
 

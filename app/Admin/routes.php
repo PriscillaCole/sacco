@@ -17,5 +17,6 @@ Route::group([
     $router->resource('savings', SavingController::class);
     $router->resource('transactions', TransactionController::class);
     $router->resource('sacco-members', SaccoMemberController::class);
+    $router->resource('applications', ApplicationController::class);
 
 });

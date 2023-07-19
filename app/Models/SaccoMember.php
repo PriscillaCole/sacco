@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 class SaccoMember extends Model
 {
     use HasFactory;
@@ -42,7 +45,48 @@ class SaccoMember extends Model
     {
          parent::boot();
          self::creating(function ($model) {
-              $model->password = bcrypt($model->password);
+
+        //add a sacco memeber to the users table
+            $member = new User();
+            $member->password = Hash::make('password');
+            $member->name = $model->full_name;
+            $member->username = $model->full_name;
+            $member->email = $model->email;
+            $member->save();
+
          });
+
+         self::created(function ($model){
+        //give the member the sacco-member  role of 3
+            $member = User::where('email', $model->email)->first();
+            $new_role = new AdminRoleUser();
+            $new_role->user_id = $member->id;
+            $new_role->role_id = 3;
+            $new_role->save();
+
+            $model->user_id = $member->id;
+            $model->save();
+
+         });
+
+         self::updating(function ($model) {
+         
+           
+        });
+
+        self::updated(function ($model){
+        //give the member the sacco-member  role of 3 after they have been accepted
+        if($model->status == 'accepted'){
+                AdminRoleUser::where([
+                    'user_id' => $model->user_id
+                ])->delete();
+            $new_role = new AdminRoleUser();
+            $new_role->user_id = $model->user_id;
+            $new_role->role_id = 3;
+            $new_role->save();
+        }
+        });
+   
+        
     }
 }

@@ -12,7 +12,7 @@ use \App\Models\Sacco;
 use Encore\Admin\Facades\Admin;
 
 
-class SaccoMemberController extends AdminController
+class ApplicationController extends AdminController
 {
     /**
      * Title for current resource.
@@ -34,9 +34,18 @@ class SaccoMemberController extends AdminController
         if($user->isRole('sacco')){
             $sacco_email = Admin::user()->email;
             $sacco = Sacco::where('email', $sacco_email)->first();
-            $grid->model()->where('sacco_id', $sacco->id)->where('status', 'accepted')->orderBy('id', 'desc');
-        }
+            $grid->model()->where('sacco_id', $sacco->id)->where('status', '!=', 'accepted')->orderBy('id', 'desc');
+        } 
 
+        
+        //disable create button
+        $grid->disableCreateButton();
+
+        //disable delete action button
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+        });
+        
         $grid->column('full_name', __('Full name'));
         $grid->column('image', __('Image'));
         $grid->column('email', __('Email'));
@@ -44,11 +53,6 @@ class SaccoMemberController extends AdminController
         $grid->column('membership_type', __('Membership type'));
         $grid->column('membership_id', __('Membership id'));
        
-        if($user->isRole('basic_user')){
-            $grid->model()->where('user_id', $user->id);
-            $grid->column('status', __('Status'));
-        }
-    
 
         return $grid;
     }
@@ -89,6 +93,11 @@ class SaccoMemberController extends AdminController
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
+        //disable the delete button
+        $show->panel()->tools(function ($tools) {
+            $tools->disableDelete();
+        });
+
         return $show;
     }
 
@@ -100,53 +109,47 @@ class SaccoMemberController extends AdminController
     protected function form()
     {
         $form = new Form(new SaccoMember());
-        $user = Admin::user();
+       
+       $user = Admin::user();
 
-      if($user->isRole('sacco')){
+     //show the sacco only requests from members
+      if($form->isEditing()){
         $sacco_email = Admin::user()->email;
         $sacco = Sacco::where('email', $sacco_email)->first();
         $form->display('sacco_id', __('Sacco'))->default($sacco->name); 
-        $form->hidden('sacco_id', __('Sacco'))->default($sacco->id);  
-        $form->hidden('status', __('Status'))->default('accepted');
-      }
-      if($user->isRole('basic_user')){
-        $saccos = Sacco::all();
-        $saccoArray = [];
-        foreach ($saccos as $sacco) {
-            $saccoArray[$sacco->id] = $sacco->name;
-        }
 
-         $form->select('sacco_id', __('Sacco'))->options($saccoArray)->rules('required'); 
-         $form->hidden('user_id', __('User'))->default($user->id);
-      }
-
-
-      
-        $form->text('full_name', __('Full name'));
-        $form->date('date_of_birth', __('Date of birth'))->default(date('Y-m-d'));
-        $form->text('gender', __('Gender'));
-        $form->image('image', __('Image'));
-        $form->text('nationality', __('Nationality'));
-        $form->text('identification_number', __('Identification number'));
-        $form->text('physical_address', __('Physical address'));
-        $form->text('postal_address', __('Postal address'));
-        $form->email('email', __('Email'));
-        $form->text('phone_number', __('Phone number'));
-        $form->text('employment_status', __('Employment status'));
-        $form->text('employer_name', __('Employer name'));
-        $form->decimal('monthly_income', __('Monthly income'));
-        $form->text('bank_account_number', __('Bank account number'));
-        $form->text('bank_name', __('Bank name'));
-        $form->text('membership_type', __('Membership type'));
-        $form->text('membership_id', __('Membership id'));
-        $form->date('date_of_joining', __('Date of joining'))->default(date('Y-m-d'));
-        $form->text('next_of_kin_name', __('Next of kin name'));
-        $form->text('next_of_kin_contact', __('Next of kin contact'));
-        $form->text('beneficiary_name', __('Beneficiary name'));
-        $form->text('beneficiary_relationship', __('Beneficiary relationship'));
-        $form->hidden('password', __('Password'))->default('12345678');
+        $form->display('full_name', __('Full name'));
+        $form->display('date_of_birth', __('Date of birth'))->default(date('Y-m-d'));
+        $form->display('gender', __('Gender'));
+        $form->display('image', __('Image'));
+        $form->display('nationality', __('Nationality'));
+        $form->display('identification_number', __('Identification number'));
+        $form->display('physical_address', __('Physical address'));
+        $form->display('postal_address', __('Postal address'));
+        $form->display('email', __('Email'));
+        $form->display('phone_number', __('Phone number'));
+        $form->display('employment_status', __('Employment status'));
+        $form->display('employer_name', __('Employer name'));
+        $form->display('monthly_income', __('Monthly income'));
+        $form->display('bank_account_number', __('Bank account number'));
+        $form->display('bank_name', __('Bank name'));
+        $form->display('membership_type', __('Membership type'));
+        $form->display('membership_id', __('Membership id'));
+        $form->display('date_of_joining', __('Date of joining'))->default(date('Y-m-d'));
+        $form->display('next_of_kin_name', __('Next of kin name'));
+        $form->display('next_of_kin_contact', __('Next of kin contact'));
+        $form->display('beneficiary_name', __('Beneficiary name'));
+        $form->display('beneficiary_relationship', __('Beneficiary relationship'));
+        $form->divider();
+        $form->select('status', __('Status'))->options(['pending' => 'Pending', 'accepted' => 'Accepted', 'rejected' => 'Rejected'])->rules('required');
+        $form->textarea('reason', __('Reason for rejection'))->rules('required_if:status,rejected');
      
+      }
 
+      //disable the delete button
+        $form->tools(function (Form\Tools $tools) {
+            $tools->disableDelete();
+        });
 
 
        // return to list after saving
