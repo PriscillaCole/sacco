@@ -12,6 +12,8 @@ class SaccoMember extends Model
     use HasFactory;
 
     protected $fillable = [
+        'sacco_id',
+        'user_id',
         'full_name',
         'date_of_birth',
         'gender',
@@ -19,6 +21,7 @@ class SaccoMember extends Model
         'nationality',
         'identification_number',
         'physical_address',
+        'postal_address',
         'email',
         'phone_number',
         'employment_status',
@@ -33,6 +36,7 @@ class SaccoMember extends Model
         'next_of_kin_contact',
         'beneficiary_name',
         'beneficiary_relationship',
+        'status',
         'password',
     ];
 

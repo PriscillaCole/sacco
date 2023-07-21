@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SaccoMemberController;
 
 
 /*
@@ -19,6 +20,10 @@ use App\Http\Controllers\AuthController;
    
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+    // routes/api.php
+
+    Route::apiResource('sacco_members', SaccoMemberController::class);
+
 
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
