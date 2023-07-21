@@ -42,7 +42,7 @@ class AuthController extends Controller
             $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
-            $user->username = $request->input('username'); // Assuming username is the same as email
+            $user->username = $request->input('email'); // Assuming username is the same as email
             $user->password = Hash::make($request->input('password'));
             $user->save();
             

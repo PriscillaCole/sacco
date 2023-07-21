@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Encore\Admin\Facades\Admin;
 
 trait RegistersUsers
 {
@@ -41,7 +42,7 @@ trait RegistersUsers
 
         return $request->wantsJson()
                     ? new JsonResponse([], 201)
-                    : redirect($this->redirectPath());
+                    : redirect('/admin');
     }
 
     /**
@@ -51,7 +52,7 @@ trait RegistersUsers
      */
     protected function guard()
     {
-        return Auth::guard();
+        return Admin::guard();
     }
 
     /**
