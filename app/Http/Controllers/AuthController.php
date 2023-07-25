@@ -76,7 +76,7 @@ class AuthController extends Controller
     {
         // Validate user input
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
     
@@ -85,7 +85,7 @@ class AuthController extends Controller
         }
     
         // Check if the user exists
-        $user = User::where('email', $request->input('email'))->first();
+        $user = User::where('username', $request->input('username'))->first();
     
         if (!$user) {
             return Utils::apiError('User not found.');
@@ -99,7 +99,7 @@ class AuthController extends Controller
         // Generate JWT token and attach it to the user object
         JWTAuth::factory()->setTTL(60 * 24 * 30 * 12);
         $token = auth('api')->attempt([
-            'email' => $user->email,
+            'username' => $user->username,
             'password' => $request->input('password'),
         ]);
         $user->token = $token;
