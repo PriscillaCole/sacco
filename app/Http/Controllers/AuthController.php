@@ -127,7 +127,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return Utils::apiSuccess($user, 'Logout successful.');
     }
 
     /**
