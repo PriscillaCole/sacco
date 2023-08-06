@@ -20,12 +20,11 @@ use App\Http\Controllers\SaccoMemberController;
    
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+    Route::post('logout', [AuthController::class, 'logout']);
     // routes/api.php
 
     Route::apiResource('sacco_members', SaccoMemberController::class);
 
-
-    Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 
