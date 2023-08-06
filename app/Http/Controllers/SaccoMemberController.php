@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SaccoMember;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use App\Utils\Utils;
 
 class SaccoMemberController extends Controller
 {
