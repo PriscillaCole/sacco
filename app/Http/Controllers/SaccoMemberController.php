@@ -39,7 +39,9 @@ class SaccoMemberController extends Controller
             $data['image'] = $imagePath;
         }
 
-        return SaccoMember::create($data);
+        $member = SaccoMember::create($data);
+
+        return Utils::apiSuccess($member, 'Sacco member registered successfully.');
     }
 
     public function update(Request $request, $id)
