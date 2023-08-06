@@ -49,8 +49,9 @@ class SaccoMember extends Model
     {
          parent::boot();
          self::creating(function ($model) {
-
-        //add a sacco memeber to the users table
+ if(auth()->user()->isRole('administrator')){
+        
+        //add a sacco member to the users table
             $member = new User();
             $member->password = Hash::make('password');
             $member->name = $model->full_name;
@@ -58,7 +59,8 @@ class SaccoMember extends Model
             $member->email = $model->email;
             $member->save();
 
-         });
+         }
+        });
 
          self::created(function ($model){
         //give the member the sacco-member  role of 3
