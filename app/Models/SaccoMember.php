@@ -53,28 +53,28 @@ class SaccoMember extends Model
          self::creating(function ($model) {
 
  
-        if(Admin::user()->isRole('sacco')){
-        //add a sacco member to the users table
-            $member = new User();
-            $member->password = Hash::make('password');
-            $member->name = $model->full_name;
-            $member->username = $model->full_name;
-            $member->email = $model->email;
-            $member->save();
+        // if(Admin::user()->isRole('sacco')){
+        // //add a sacco member to the users table
+        //     $member = new User();
+        //     $member->password = Hash::make('password');
+        //     $member->name = $model->full_name;
+        //     $member->username = $model->full_name;
+        //     $member->email = $model->email;
+        //     $member->save();
 
-        }
+        // }
         });
 
          self::created(function ($model){
-        //give the member the sacco-member  role of 3
-            $member = User::where('email', $model->email)->first();
-            $new_role = new AdminRoleUser();
-            $new_role->user_id = $member->id;
-            $new_role->role_id = 3;
-            $new_role->save();
+        // //give the member the sacco-member  role of 3
+        //     $member = User::where('email', $model->email)->first();
+        //     $new_role = new AdminRoleUser();
+        //     $new_role->user_id = $member->id;
+        //     $new_role->role_id = 3;
+        //     $new_role->save();
 
-            $model->user_id = $member->id;
-            $model->save();
+        //     $model->user_id = $member->id;
+        //     $model->save();
 
          });
 
