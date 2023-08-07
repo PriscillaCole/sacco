@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Encore\Admin\Facades\Admin;
+use App\Models\AdminRoleUser;
 
 class SaccoMember extends Model
 {
@@ -49,8 +51,9 @@ class SaccoMember extends Model
     {
          parent::boot();
          self::creating(function ($model) {
+
  
-        if(auth()->user()->isRole('sacco')){
+        if(Admin::user()->isRole('sacco')){
         //add a sacco member to the users table
             $member = new User();
             $member->password = Hash::make('password');
