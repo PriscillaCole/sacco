@@ -77,7 +77,7 @@ class SaccoMemberController extends Controller
     //delete Sacco Member
     public function destroy($id)
     {
-        $saccoMember = SaccoMember::findOrFail($id);
+        $saccoMember = SaccoMember::where('user_id', $id)->firstOrFail();
         $saccoMember->delete();
         return response()->json(['message' => 'Successfully deleted.']);
     }
