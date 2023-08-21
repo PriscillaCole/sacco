@@ -14,11 +14,13 @@ class SaccoMemberController extends Controller
         return SaccoMember::all();
     }
 
+    //get sacco member by id
     public function show($id)
     {
-        return SaccoMember::findOrFail($id);
+        return  $saccoMember = SaccoMember::where('user_id', $id)->firstOrFail();
     }
 
+    //create sacco member
     public function store(Request $request)
     {
       
@@ -45,9 +47,10 @@ class SaccoMemberController extends Controller
         return Utils::apiSuccess($member, 'Sacco member registered successfully.');
     }
 
+    //edit sacco member
     public function update(Request $request, $id)
     {
-        $saccoMember = SaccoMember::findOrFail($id);
+        $saccoMember = SaccoMember::where('user_id', $id)->firstOrFail();
 
         $data = $request->except(['image', '_method']); // Exclude 'image' and '_method'
         $rules = [
@@ -71,6 +74,7 @@ class SaccoMemberController extends Controller
         return $saccoMember;
     }
 
+    //delete Sacco Member
     public function destroy($id)
     {
         $saccoMember = SaccoMember::findOrFail($id);
